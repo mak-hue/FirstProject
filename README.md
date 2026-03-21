@@ -16,12 +16,6 @@ The contract does **not store funds**. Instead, it acts as a **relay**, forwardi
 * **Block Explorer:**
   https://sepolia.basescan.org/address/0xa15618b00619a8b1291b40115c7dcf3bd119fc86
 
-You can:
-
-* View transactions
-* Verify contract activity
-* Track emitted events
-
 ---
 
 ## ⚙️ Features
@@ -31,6 +25,23 @@ You can:
 * Emits events for tracking (frontend + backend)
 * Fully gas-optimized
 * No fund storage (safer design)
+
+---
+
+## 🧪 Test Coverage
+
+This contract has been tested using **Foundry** with **100% test coverage**.
+
+### ✅ What is Covered
+
+* Successful ETH transfer
+* Refund of excess ETH
+* Revert on insufficient ETH
+* Event emission
+* Transfer failure scenarios
+
+ check (/coveragetest.png)
+```
 
 ---
 
@@ -71,8 +82,6 @@ event TinySent(address indexed from, address indexed to, uint256 amount);
 
 ## 💰 Interacting via Remix
 
-If using **Remix**:
-
 ### Value (Wei)
 
 ```
@@ -87,9 +96,7 @@ If using **Remix**:
 
 ---
 
-## 🌐 Frontend Integration
-
-Using **ethers.js**
+## 🌐 Frontend Integration (ethers.js)
 
 ### Install
 
@@ -135,25 +142,7 @@ await contractWithSigner.sendTinyETH("RECIPIENT_ADDRESS", {
 
 ```js
 contract.on("TinySent", (from, to, amount) => {
-  console.log("New transaction:");
   console.log(from, to, ethers.formatEther(amount));
-});
-```
-
----
-
-## 🗄️ Backend Indexing
-
-### Simple Listener
-
-```js
-contract.on("TinySent", async (from, to, amount, event) => {
-  console.log({
-    from,
-    to,
-    amount: amount.toString(),
-    txHash: event.log.transactionHash
-  });
 });
 ```
 
@@ -163,23 +152,19 @@ contract.on("TinySent", async (from, to, amount, event) => {
 
 ### ❌ NEVER DO THIS
 
-Do NOT store your private key like this:
+Do NOT store your private key in `.env` like this:
 
 ```
 PRIVATE_KEY=0xabc123...
 ```
 
-👉 This is dangerous and can expose your wallet.
-
 ---
 
-## ✅ Use Encrypted Keystore Instead
+## ✅ Secure Method (Encrypted Keystore)
 
-Using Foundry (`cast`):
+### Step 1: Open WSL Terminal
 
-### Step 1: Open your WSL terminal
-
-### Step 2: Run:
+### Step 2: Run
 
 ```bash
 cast wallet import myWallet --interactive
@@ -187,24 +172,16 @@ cast wallet import myWallet --interactive
 
 ---
 
-### Step 3: What Happens Next
+### Step 3: Follow Prompts
 
-You will be prompted to:
-
-1. **Enter your private key**
-
-   * Paste it (it will be hidden)
-
-2. **Create a password**
-
-   * This encrypts your wallet
+* Enter your private key (hidden input)
+* Create a strong password
 
 ---
 
 ### Step 4: Result
 
-* Your key is stored securely as an **encrypted keystore file**
-* Located in:
+* Your key is encrypted and stored in:
 
 ```
 ~/.foundry/keystores/
@@ -212,25 +189,16 @@ You will be prompted to:
 
 ---
 
-### Step 5: Use It Safely
-
-Instead of exposing your private key, you can now run:
+### Step 5: Use It
 
 ```bash
-cast send <CONTRACT_ADDRESS> "sendTinyETH(address)" <RECIPIENT> \
+cast send 0xa15618b00619a8b1291b40115c7dCf3Bd119FC86 \
+"sendTinyETH(address)" <RECIPIENT> \
 --value 100000000000000 \
 --account myWallet
 ```
 
-👉 It will prompt for your password when needed
-
----
-
-## 🧠 Why This Matters
-
-* Protects your funds
-* Prevents accidental leaks (GitHub, .env, etc.)
-* Industry best practice
+You’ll be prompted for your password — no private key exposure.
 
 ---
 
@@ -262,9 +230,9 @@ User A → Contract → User B
 ## 🚀 Future Improvements
 
 * Batch transfers
-* Transaction dashboard
+* Dashboard UI
 * Gasless transactions
-* Activity analytics
+* Analytics
 
 ---
 
