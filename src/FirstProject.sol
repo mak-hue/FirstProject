@@ -13,13 +13,13 @@ contract TinySender {
         if (msg.value < AMOUNT) revert InsufficientETH();
 
         // Send fixed amount to recipient
-        (bool success, ) = recipient.call{value: AMOUNT}("");
+        (bool success,) = recipient.call{value: AMOUNT}("");
         if (!success) revert TransferFailed();
 
         // Refund extra (if any)
         uint256 excess = msg.value - AMOUNT;
         if (excess > 0) {
-            (bool refundSuccess, ) = msg.sender.call{value: excess}("");
+            (bool refundSuccess,) = msg.sender.call{value: excess}("");
             if (!refundSuccess) revert TransferFailed();
         }
 
